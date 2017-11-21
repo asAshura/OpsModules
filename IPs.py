@@ -91,7 +91,7 @@ if (len(ip_split) == 4) and (int(ip_split[0]) != 0):
                 print('either it\'s negative or bigger than 255')
         except ValueError as e:
             print('error')
-    print('it\'s an IP address)
+    print('it\'s an IP address')
 else:
     print('IP needs 4 numbers and first one can\'t be 0')
     
