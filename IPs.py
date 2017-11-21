@@ -78,6 +78,23 @@ def ipFormatChk(ip_input):
         return True
     else:
         return False
+# or 
+
+ip_str=input('input IP: ')
+ip_split = ip_str.split('.')
+
+if (len(ip_split) == 4) and (int(ip_split[0]) != 0):
+    for i, x in enumerate(ip_split):
+        try:
+            int_x = int(x)
+            if int_x < 0 or int_x > 255:
+                print('either it\'s negative or bigger than 255')
+        except ValueError as e:
+            print('error')
+    print('it\'s an IP address)
+else:
+    print('IP needs 4 numbers and first one can\'t be 0')
+    
 
 '''
 Convert Interger to IP with socket
