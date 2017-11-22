@@ -8,6 +8,7 @@
 7. Convert Interger to IP without socket
 8. Convert IP to Interger without socket
 9. IP translation with IPy
+10. IPv6 address format check
 '''
 
 
@@ -157,3 +158,51 @@ else:
 print('hexadecimal: %s' % ips.strHex())
 print('binary ip: %s' % ips.strBin())
 print('iptype: %s' % ips.iptype())
+
+'''
+10. IPv6 format check
+'''
+def validate_ip(ip_str):
+
+    #:Regex for validating an IPv6 in hex notation
+    _HEX_RE = re.compile(r'^:{0,1}([0-9a-fA-F]{0,4}:){0,7}[0-9a-fA-F]{0,4}:{0,1}$')
+
+    #:Regex for validating an IPv6 in dotted-quad notation
+    _DOTTED_QUAD_RE = re.compile(r'^:{0,1}([0-9a-fA-F]{0,4}:){2,6}(\d{1,3}\.){3}\d{1,3}$')
+    if _HEX_RE.match(ip_str):
+        if ':::' in ip_str:
+            return False
+        if '::' not in ip_str:
+            halves = ip_str.split(':')
+            return len(halves) == 8 and halves[0] != '' and halves[-1] != ''
+        halves = ip_str.split('::')
+        #IP中有一个以上的::
+        if len(halves) != 2:
+            return False
+        # ::之前不为空且第一个字符是：
+        if halves[0] != '' and halves[0][0] == ':':
+            return False
+        # ::之后不是空且最后一个字符是：
+        if halves[-1] != '' and halves[-1][-1] == ':':
+            return False
+        return True
+        # 兼容IPv4的IPv6格式 如FFFF:0000:0000:0FFF:FFFF:FFFF:192.168.0.1
+    if _DOTTED_QUAD_RE.match(ip_str):
+        if ':::' in ip_str:
+            return False
+        if '::' not in ip_str:
+            halves = ip_str.split(':')
+            return len(halves) == 7 and halves[0] != ''
+        halves = ip_str.split('::')
+        if len(halves) > 2:
+           return False
+        hextets = ip_str.split(':')
+        quads = hextets[-1].split('.')
+        if int(quads[0]) == 0:
+            return False
+        for q in quads:
+            if int(q) > 255 or int(q) < 0:
+                return False
+        return True
+    return False
+
