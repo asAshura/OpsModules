@@ -162,6 +162,10 @@ print('iptype: %s' % ips.iptype())
 '''
 10. IPv6 format check
 '''
+import os
+import sys
+import re
+
 def validate_ip(ip_str):
 
     #:Regex for validating an IPv6 in hex notation
